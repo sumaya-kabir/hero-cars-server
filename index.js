@@ -19,6 +19,7 @@ async function run(){
     try{
         //collections
         const carsCollection = client.db('heroCarsData').collection('cars');
+        const bookingsCollection = client.db('heroCarsData').collection('bookings')
         
 
         // APIs
@@ -33,6 +34,12 @@ async function run(){
             const query = {category: category};
             const perCategory = await carsCollection.find(query).toArray();
             res.send(perCategory);
+        });
+
+        app.post('/bookings', async(req, res) => {
+            const bookings =req.body;
+            const result = await bookingsCollection.insertOne(bookings);
+            res.send(result);
         })
     }
     finally{
