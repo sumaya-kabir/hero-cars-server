@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -36,6 +36,12 @@ async function run(){
             const perCategory = await carsCollection.find(query).toArray();
             res.send(perCategory);
         });
+        app.get('/bookings', async(req, res) => {
+            const email = req.query.email;
+            const query = {email: email};
+            const result = await bookingsCollection.find(query).toArray();
+            res.send(result);
+        });
 
         app.post('/bookings', async(req, res) => {
             const bookings =req.body;
@@ -47,13 +53,39 @@ async function run(){
             const query = {role: "seller"};
             const seller = await usersCollection.find(query).toArray();
             res.send(seller)
-        })
+        });
 
         app.post('/sellers', async(req,res) => {
             const sellers = req.body;
             const result = await usersCollection.insertOne(sellers);
             res.send(result)
-        })
+        });
+
+        app.delete('/sellers/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        });
+
+        app.get('/buyers', async(req, res) => {
+            const query = {role: "buyer"};
+            const buyer = await usersCollection.find(query).toArray();
+            res.send(buyer)
+        });
+
+        app.post('/buyers', async(req,res) => {
+            const buyers = req.body;
+            const result = await usersCollection.insertOne(buyers);
+            res.send(result)
+        });
+
+        app.delete('/buyers/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        });
     }
     finally{
 
