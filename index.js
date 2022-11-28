@@ -36,6 +36,14 @@ async function run(){
             const perCategory = await carsCollection.find(query).toArray();
             res.send(perCategory);
         });
+
+        app.post('/cars', async(req, res) => {
+            const newProduct =req.body;
+            const result = await carsCollection.insertOne(newProduct);
+            res.send(result);
+        });
+
+
         app.get('/bookings', async(req, res) => {
             const email = req.query.email;
             const query = {email: email};
