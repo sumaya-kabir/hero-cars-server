@@ -30,6 +30,20 @@ async function run(){
             res.send(cars);
         });
 
+        app.get('/myproducts', async(req, res) => {
+            const email = req.query.email;
+            const query = {email: email};
+            const cars = await carsCollection.find(query).toArray();
+            res.send(cars);
+        });
+
+        app.delete('/myproducts/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const result = await carsCollection.deleteOne(filter);
+            res.send(result);
+        });
+
         app.get('/cars/:category', async(req, res) => {
             const category = req.params.category;
             const query = {category: category};
