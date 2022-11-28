@@ -21,6 +21,7 @@ async function run(){
         const carsCollection = client.db('heroCarsData').collection('cars');
         const bookingsCollection = client.db('heroCarsData').collection('bookings');
         const usersCollection = client.db('heroCarsData').collection('users');
+        const advertiseCollection = client.db('heroCarsData').collection('advertise');
         
 
         // APIs
@@ -108,6 +109,18 @@ async function run(){
             const result = await usersCollection.deleteOne(filter);
             res.send(result);
         });
+
+        app.get('/advertise', async(req, res) => {
+            const query = {};
+            const allAdvertise = await advertiseCollection.find(query).toArray();
+            res.send(allAdvertise);
+        })
+
+        app.post('/advertise', async(req, res) => {
+            const advertise = req.body;
+            const result = await advertiseCollection.insertOne(advertise);
+            res.send(result)
+        })
     }
     finally{
 
